@@ -12,7 +12,7 @@ defmodule IslandsEngie.Coordinate do
         col: pos_integer
     }
 
-    @type creation_result :: {:ok, Coordinate.t()} | {:error, any()}
+    @type creation_result :: {:ok, t()} | {:error, any()}
 
     @doc """
     ## Examples
