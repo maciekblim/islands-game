@@ -17,8 +17,6 @@ defmodule IslandsEngie.Guesses do
         misses: MapSet.new()
     }
 
-    g = Guesses.new()
-
     @doc """
     ## Examples
 
