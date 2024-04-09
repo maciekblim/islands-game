@@ -3,7 +3,7 @@ defmodule IslandsEngie.Board do
 
     @type t :: map()
 
-    @type guess_result :: :win #TODO
+    @type guess_result :: {:hit | :miss, Island.type() | :none, :win | :no_win, t()}
 
     @doc """
     ## Examples
