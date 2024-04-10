@@ -5,8 +5,8 @@ defmodule IslandsEngie.Rules do
               player1: :islands_not_set,
               player2: :islands_not_set
 
-    @type state :: :initialized | :players_set | :set_islands | :player1_turn
-    @type action :: :add_player | :position_islands
+    @type state :: :initialized | :players_set | :set_islands | :player1_turn | :player2_turn | :game_over
+    @type action :: :add_player | :position_islands | :set_islands | :guess_coordinate | :win_check
     @type set_island_state :: :islands_not_set | :islands_set
     @type t :: %__MODULE__{
         state: state(),
@@ -72,6 +72,17 @@ defmodule IslandsEngie.Rules do
         case both_players_islands_set?(rules) do
             true -> {:ok, %Rules{rules | state: :player1_turn}}
             false -> {:ok, rules}
+        end
+    end
+
+    def check(%Rules{state: :player1_turn} = rules, {:guess_coordinate, :player1}) do
+        {:ok, %Rules{rules | state: :player2_turn}}
+    end
+
+    def check(%Rules{state: :player1_turn} = rules, {:win_check, win_or_not}) do
+        case win_or_not do
+            :no_win -> {:ok, rules}
+            :win -> {:ok, %Rules{rules | state: :game_over}}
         end
     end
 
