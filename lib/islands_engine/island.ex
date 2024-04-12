@@ -33,7 +33,7 @@ defmodule IslandsEngie.Island do
 
         iex> {:ok, c} = IslandsEngie.Coordinate.new(4, 4)
         ...> IslandsEngie.Island.new(:wrong, c)
-        {:error, :ivalid_island_type}
+        {:error, :invalid_island_type}
 
         iex> {:ok, c} = IslandsEngie.Coordinate.new(10, 10)
         ...> IslandsEngie.Island.new(:l_shape, c)
@@ -55,7 +55,7 @@ defmodule IslandsEngie.Island do
     defp offsets(:dot), do: {:ok, [{0, 0}]}
     defp offsets(:l_shape), do: {:ok, [{0, 0}, {1, 0}, {2, 0}, {2, 1}]}
     defp offsets(:s_shape), do: {:ok, [{0, 1}, {0, 2}, {1, 0}, {1, 1}]}
-    defp offsets(_), do: {:error, :ivalid_island_type}
+    defp offsets(_), do: {:error, :invalid_island_type}
 
     defp add_coordinates(offsets, upper_left) do
         Enum.reduce_while(offsets, MapSet.new(), fn offset, acc ->
