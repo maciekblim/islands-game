@@ -1,7 +1,9 @@
 defmodule IslandsEngie.Game do
-    alias IslandsEngie.{Board, Guesses, Rules}
+    alias IslandsEngie.{Board, Coordinate, Guesses, Island, Rules}
 
     use GenServer
+
+    @players [:player1, :player2]
 
     def init(name) do
         player1 = %{
@@ -34,6 +36,24 @@ defmodule IslandsEngie.Game do
         end
     end
 
+    def handle_call({:position_island, player, island_type, row, col}, _from, state) do
+        board = player_board(state, player)
+        with {:ok, rules} <- Rules.check(state.rules, {:position_islands, player}),
+             {:ok, coordinate} <- Coordinate.new(row, col),
+             {:ok, island} <- Island.new(island_type, coordinate),
+             %{} = board <- Board.position_island(board, island_type, island)
+        do
+            state
+            |> update_board(player, board)
+            |> update_rules(rules)
+            |> reply_success(:ok)
+        else
+            :error -> {:reply, :error, state}
+            {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
+            {:error, :invalid_island_type} -> {:reply, {:error, :invalid_island_type}, state}
+        end
+    end
+
     def start_link(name) when is_binary(name) do
         GenServer.start_link(__MODULE__, name, [])
     end
@@ -49,12 +69,40 @@ defmodule IslandsEngie.Game do
         GenServer.call(game, {:add_player, name})
     end
 
+    @doc """
+    ## Examples
+
+        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
+        ...> IslandsEngie.Game.add_player(game, "Wilma")
+        ...> IslandsEngie.Game.position_island(game, :player1, :square, 1, 1)
+        :ok
+
+        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
+        ...> IslandsEngie.Game.add_player(game, "Wilma")
+        ...> IslandsEngie.Game.position_island(game, :player1, :square, 12, 1)
+        {:error, :invalid_coordinate}
+
+        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
+        ...> IslandsEngie.Game.add_player(game, "Wilma")
+        ...> IslandsEngie.Game.position_island(game, :player1, :wrong_type, 12, 1)
+        {:error, :invalid_island_type}
+    """
+    def position_island(game, player, island_type, row, col) when player in @players do
+        GenServer.call(game, {:position_island, player, island_type, row, col})
+    end
+
     defp update_player2_name(state, name),
         do: put_in(state.player2.name, name)
     
     defp update_rules(state, rules),
         do: %{state | rules: rules}
     
+    defp update_board(state, player, board),
+        do: Map.update!(state, player, fn player -> %{player | board: board} end)
+    
     defp reply_success(state, reply),
         do: {:reply, reply, state}
+
+    defp player_board(state, player),
+        do: Map.get(state, player).board
 end
