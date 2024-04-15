@@ -5,6 +5,12 @@ defmodule IslandsEngine.Game do
 
     @players [:player1, :player2]
 
+    def via_tuple(name), do: {:via, Registry, {Registry.Game, name}}
+
+    def start_link(name) when is_binary(name) do
+        GenServer.start_link(__MODULE__, name, name: via_tuple(name))
+    end
+
     def init(name) do
         player1 = %{
             name: name,
@@ -86,10 +92,6 @@ defmodule IslandsEngine.Game do
             :error -> {:reply, :error, state}
             {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
         end
-    end
-
-    def start_link(name) when is_binary(name) do
-        GenServer.start_link(__MODULE__, name, [])
     end
 
     @doc """
