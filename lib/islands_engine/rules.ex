@@ -56,7 +56,7 @@ defmodule IslandsEngie.Rules do
             player2: :islands_not_set
         }}
     """
-    @spec check(t(), action()) :: :error | {:ok, t()}
+    @spec check(t(), action() | {action(), any()}) :: :error | {:ok, t()}
     def check(%Rules{state: :initialized} = rules, :add_player),
         do: {:ok, %Rules{rules | state: :players_set}}
 

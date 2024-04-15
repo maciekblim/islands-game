@@ -93,13 +93,13 @@ defmodule IslandsEngie.Game do
 
     defp update_player2_name(state, name),
         do: put_in(state.player2.name, name)
-    
+
     defp update_rules(state, rules),
         do: %{state | rules: rules}
-    
+
     defp update_board(state, player, board),
         do: Map.update!(state, player, fn player -> %{player | board: board} end)
-    
+
     defp reply_success(state, reply),
         do: {:reply, reply, state}
 
