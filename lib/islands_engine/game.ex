@@ -54,6 +54,20 @@ defmodule IslandsEngie.Game do
         end
     end
 
+    def handle_call({:set_islands, player}, _from, state) do
+        board = player_board(state, player)
+        with {:ok, rules} <- Rules.check(state.rules, {:set_islands, player}),
+             true <- Board.all_islands_positioned?(board)
+        do
+            state
+            |> update_rules(rules)
+            |> reply_success({:ok, board})
+        else
+            :error -> {:reply, :error, state}
+            false -> {:reply, {:error, :not_all_islands_positioned}, state}
+        end
+    end
+
     def start_link(name) when is_binary(name) do
         GenServer.start_link(__MODULE__, name, [])
     end
@@ -89,6 +103,28 @@ defmodule IslandsEngie.Game do
     """
     def position_island(game, player, island_type, row, col) when player in @players do
         GenServer.call(game, {:position_island, player, island_type, row, col})
+    end
+
+    @doc """
+    ## Examples
+
+        iex> {:ok, game} = IslandsEngie.Game.start_link("Dino")
+        ...> IslandsEngie.Game.add_player(game, "Pebbles")
+        ...> IslandsEngie.Game.set_islands(game, :player1)
+        {:error, :not_all_islands_positioned}
+
+        iex> {:ok, game} = IslandsEngie.Game.start_link("Dino")
+        ...> IslandsEngie.Game.add_player(game, "Pebbles")
+        ...> IslandsEngie.Game.position_island(game, :player1, :atoll, 1, 1)
+        ...> IslandsEngie.Game.position_island(game, :player1, :dot, 1, 4)
+        ...> IslandsEngie.Game.position_island(game, :player1, :l_shape, 1, 5)
+        ...> IslandsEngie.Game.position_island(game, :player1, :s_shape, 5, 1)
+        ...> IslandsEngie.Game.position_island(game, :player1, :square, 5, 5)
+        ...> IslandsEngie.Game.set_islands(game, :player1)
+        {:ok, _}
+    """
+    def set_islands(game, player) when player in @players do
+        GenServer.call(game, {:set_islands, player})
     end
 
     defp update_player2_name(state, name),
