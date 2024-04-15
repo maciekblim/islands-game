@@ -1,4 +1,4 @@
-defmodule IslandsEngie.Rules do
+defmodule IslandsEngine.Rules do
     alias __MODULE__
 
     defstruct state: :initialized,
@@ -17,7 +17,7 @@ defmodule IslandsEngie.Rules do
     @doc """
     ## Examples
 
-        iex> IslandsEngie.Rules.new()
+        iex> IslandsEngine.Rules.new()
         %Rules{}
     """
     @spec new() :: t()
@@ -26,31 +26,31 @@ defmodule IslandsEngie.Rules do
     @doc """
     ## Examples
 
-        iex> rules = IslandsEngie.Rules.new()
-        ...> IslandsEngie.Rules.check(rules, :add_player)
-        {:ok, %IslandsEngie.Rules{state: :players_set}}
+        iex> rules = IslandsEngine.Rules.new()
+        ...> IslandsEngine.Rules.check(rules, :add_player)
+        {:ok, %IslandsEngine.Rules{state: :players_set}}
 
-        iex> rules = IslandsEngie.Rules.new()
-        ...> IslandsEngie.Rules.check(rules, :wrong_action)
+        iex> rules = IslandsEngine.Rules.new()
+        ...> IslandsEngine.Rules.check(rules, :wrong_action)
         :error
 
-        iex> rules = IslandsEngie.Rules.new()
-        ...> {:ok, rules} = IslandsEngie.Rules.check(rules, :add_player)
-        ...> IslandsEngie.Rules.check(rules, {:position_islands, :player2})
+        iex> rules = IslandsEngine.Rules.new()
+        ...> {:ok, rules} = IslandsEngine.Rules.check(rules, :add_player)
+        ...> IslandsEngine.Rules.check(rules, {:position_islands, :player2})
         {:ok,
-         %IslandsEngie.Rules{
+         %IslandsEngine.Rules{
             state: :players_set,
             player1: :islands_not_set,
             player2: :islands_not_set
         }}
 
-        iex> rules = IslandsEngie.Rules.new()
-        ...> {:ok, rules} = IslandsEngie.Rules.check(rules, :add_player)
-        ...> {:ok, rules} = IslandsEngie.Rules.check(rules, {:position_islands, :player1})
-        ...> {:ok, rules} = IslandsEngie.Rules.check(rules, {:position_islands, :player2})
-        ...> {:ok, rules} = IslandsEngie.Rules.check(rules, {:set_islands, :player1})
+        iex> rules = IslandsEngine.Rules.new()
+        ...> {:ok, rules} = IslandsEngine.Rules.check(rules, :add_player)
+        ...> {:ok, rules} = IslandsEngine.Rules.check(rules, {:position_islands, :player1})
+        ...> {:ok, rules} = IslandsEngine.Rules.check(rules, {:position_islands, :player2})
+        ...> {:ok, rules} = IslandsEngine.Rules.check(rules, {:set_islands, :player1})
         {:ok,
-         %IslandsEngie.Rules{
+         %IslandsEngine.Rules{
             state: :players_set,
             player1: :islands_set,
             player2: :islands_not_set

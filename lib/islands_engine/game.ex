@@ -1,5 +1,5 @@
-defmodule IslandsEngie.Game do
-    alias IslandsEngie.{Board, Coordinate, Guesses, Island, Rules}
+defmodule IslandsEngine.Game do
+    alias IslandsEngine.{Board, Coordinate, Guesses, Island, Rules}
 
     use GenServer
 
@@ -95,8 +95,8 @@ defmodule IslandsEngie.Game do
     @doc """
     ## Examples
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
-        ...> IslandsEngie.Game.add_player(game, "Jon")
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Frank")
+        ...> IslandsEngine.Game.add_player(game, "Jon")
         :ok
     """
     def add_player(game, name) when is_binary(name) do
@@ -106,19 +106,19 @@ defmodule IslandsEngie.Game do
     @doc """
     ## Examples
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
-        ...> IslandsEngie.Game.add_player(game, "Wilma")
-        ...> IslandsEngie.Game.position_island(game, :player1, :square, 1, 1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Frank")
+        ...> IslandsEngine.Game.add_player(game, "Wilma")
+        ...> IslandsEngine.Game.position_island(game, :player1, :square, 1, 1)
         :ok
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
-        ...> IslandsEngie.Game.add_player(game, "Wilma")
-        ...> IslandsEngie.Game.position_island(game, :player1, :square, 12, 1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Frank")
+        ...> IslandsEngine.Game.add_player(game, "Wilma")
+        ...> IslandsEngine.Game.position_island(game, :player1, :square, 12, 1)
         {:error, :invalid_coordinate}
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Frank")
-        ...> IslandsEngie.Game.add_player(game, "Wilma")
-        ...> IslandsEngie.Game.position_island(game, :player1, :wrong_type, 12, 1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Frank")
+        ...> IslandsEngine.Game.add_player(game, "Wilma")
+        ...> IslandsEngine.Game.position_island(game, :player1, :wrong_type, 12, 1)
         {:error, :invalid_island_type}
     """
     def position_island(game, player, island_type, row, col) when player in @players do
@@ -128,19 +128,19 @@ defmodule IslandsEngie.Game do
     @doc """
     ## Examples
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Dino")
-        ...> IslandsEngie.Game.add_player(game, "Pebbles")
-        ...> IslandsEngie.Game.set_islands(game, :player1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Dino")
+        ...> IslandsEngine.Game.add_player(game, "Pebbles")
+        ...> IslandsEngine.Game.set_islands(game, :player1)
         {:error, :not_all_islands_positioned}
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Dino")
-        ...> IslandsEngie.Game.add_player(game, "Pebbles")
-        ...> IslandsEngie.Game.position_island(game, :player1, :atoll, 1, 1)
-        ...> IslandsEngie.Game.position_island(game, :player1, :dot, 1, 4)
-        ...> IslandsEngie.Game.position_island(game, :player1, :l_shape, 1, 5)
-        ...> IslandsEngie.Game.position_island(game, :player1, :s_shape, 5, 1)
-        ...> IslandsEngie.Game.position_island(game, :player1, :square, 5, 5)
-        ...> IslandsEngie.Game.set_islands(game, :player1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Dino")
+        ...> IslandsEngine.Game.add_player(game, "Pebbles")
+        ...> IslandsEngine.Game.position_island(game, :player1, :atoll, 1, 1)
+        ...> IslandsEngine.Game.position_island(game, :player1, :dot, 1, 4)
+        ...> IslandsEngine.Game.position_island(game, :player1, :l_shape, 1, 5)
+        ...> IslandsEngine.Game.position_island(game, :player1, :s_shape, 5, 1)
+        ...> IslandsEngine.Game.position_island(game, :player1, :square, 5, 5)
+        ...> IslandsEngine.Game.set_islands(game, :player1)
         {:ok, _}
     """
     def set_islands(game, player) when player in @players do
@@ -150,9 +150,9 @@ defmodule IslandsEngie.Game do
     @doc """
     ## Examples
 
-        iex> {:ok, game} = IslandsEngie.Game.start_link("Miles")
-        ...> IslandsEngie.Game.add_player(game, "Trane")
-        ...> IslandsEngie.Game.guess_coordinate(game, :player1, 1, 1)
+        iex> {:ok, game} = IslandsEngine.Game.start_link("Miles")
+        ...> IslandsEngine.Game.add_player(game, "Trane")
+        ...> IslandsEngine.Game.guess_coordinate(game, :player1, 1, 1)
         :error
     """
     def guess_coordinate(game, player, row, col) when player in @players do

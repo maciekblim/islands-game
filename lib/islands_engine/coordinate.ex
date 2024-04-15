@@ -1,4 +1,4 @@
-defmodule IslandsEngie.Coordinate do
+defmodule IslandsEngine.Coordinate do
     alias __MODULE__
 
     @enforce_keys [:row, :col]
@@ -17,13 +17,13 @@ defmodule IslandsEngie.Coordinate do
     @doc """
     ## Examples
 
-        iex> IslandsEngie.Coordinate.new(1, 1)
-        {:ok, %IslandsEngie.Coordinate{row: 1, col: 1}}
+        iex> IslandsEngine.Coordinate.new(1, 1)
+        {:ok, %IslandsEngine.Coordinate{row: 1, col: 1}}
 
-        iex> IslandsEngie.Coordinate.new(-1, 1)
+        iex> IslandsEngine.Coordinate.new(-1, 1)
         {:error, :invalid_coordinate}
 
-        iex> IslandsEngie.Coordinate.new(4, 11)
+        iex> IslandsEngine.Coordinate.new(4, 11)
         {:error, :invalid_coordinate}
     """
     @spec new(pos_integer(), pos_integer()) :: creation_result()

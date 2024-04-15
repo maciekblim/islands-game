@@ -1,10 +1,10 @@
-defmodule IslandsEngie.Island do
-    alias IslandsEngie.{Coordinate, Island}
+defmodule IslandsEngine.Island do
+    alias IslandsEngine.{Coordinate, Island}
 
     @enforce_keys [:coordinates, :hit_coordinates]
     defstruct [:coordinates, :hit_coordinates]
 
-    
+
     @type t :: %__MODULE__{
         coordinates: map(),
         hit_coordinates: map()
@@ -18,25 +18,25 @@ defmodule IslandsEngie.Island do
     @doc """
     ## Examples
 
-        iex> {:ok, c} = IslandsEngie.Coordinate.new(4, 4)
+        iex> {:ok, c} = IslandsEngine.Coordinate.new(4, 4)
         ...> Island.new(:l_shape, c)
         {:ok,
-         %IslandsEngie.Island{
+         %IslandsEngine.Island{
             coordinates: MapSet.new([
-                %IslandsEngie.Coordinate{row: 4, col: 4},
-                %IslandsEngie.Coordinate{row: 5, col: 4},
-                %IslandsEngie.Coordinate{row: 6, col: 4},
-                %IslandsEngie.Coordinate{row: 6, col: 5} 
+                %IslandsEngine.Coordinate{row: 4, col: 4},
+                %IslandsEngine.Coordinate{row: 5, col: 4},
+                %IslandsEngine.Coordinate{row: 6, col: 4},
+                %IslandsEngine.Coordinate{row: 6, col: 5}
             ]),
             hit_coordinates: MapSet.new([])
         }}
 
-        iex> {:ok, c} = IslandsEngie.Coordinate.new(4, 4)
-        ...> IslandsEngie.Island.new(:wrong, c)
+        iex> {:ok, c} = IslandsEngine.Coordinate.new(4, 4)
+        ...> IslandsEngine.Island.new(:wrong, c)
         {:error, :invalid_island_type}
 
-        iex> {:ok, c} = IslandsEngie.Coordinate.new(10, 10)
-        ...> IslandsEngie.Island.new(:l_shape, c)
+        iex> {:ok, c} = IslandsEngine.Coordinate.new(10, 10)
+        ...> IslandsEngine.Island.new(:l_shape, c)
         {:error, :invalid_coordinate}
     """
     @spec new(island_type(), Coordinate.t()) :: creation_result()
@@ -73,18 +73,18 @@ defmodule IslandsEngie.Island do
     @doc """
     ## Examples
 
-        iex> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(1, 2)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> IslandsEngie.Island.overlaps?(square, dot)
+        iex> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(1, 2)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> IslandsEngine.Island.overlaps?(square, dot)
         true
 
-        iex> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> {:ok, l_shape_coordinate} = IslandsEngie.Coordinate.new(5, 5)
-        ...> {:ok, l_shape} = IslandsEngie.Island.new(:l_shape, l_shape_coordinate)
-        ...> IslandsEngie.Island.overlaps?(square, l_shape)
+        iex> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> {:ok, l_shape_coordinate} = IslandsEngine.Coordinate.new(5, 5)
+        ...> {:ok, l_shape} = IslandsEngine.Island.new(:l_shape, l_shape_coordinate)
+        ...> IslandsEngine.Island.overlaps?(square, l_shape)
         false
     """
     @spec overlaps?(t(), t()) :: boolean()
@@ -95,25 +95,25 @@ defmodule IslandsEngie.Island do
     @doc """
     ## Examples
 
-        iex> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> {:ok, miss} = IslandsEngie.Coordinate.new(5, 5)
-        ...> IslandsEngie.Island.guess(square, miss)
+        iex> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> {:ok, miss} = IslandsEngine.Coordinate.new(5, 5)
+        ...> IslandsEngine.Island.guess(square, miss)
         :miss
 
-        iex> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> {:ok, hit} = IslandsEngie.Coordinate.new(2, 2)
-        ...> IslandsEngie.Island.guess(square, hit)
+        iex> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> {:ok, hit} = IslandsEngine.Coordinate.new(2, 2)
+        ...> IslandsEngine.Island.guess(square, hit)
         {:hit,
-         %IslandsEngie.Island{
+         %IslandsEngine.Island{
             coordinates: MapSet.new([
-                %IslandsEngie.Coordinate{row: 1, col: 1},
-                %IslandsEngie.Coordinate{row: 2, col: 1},
-                %IslandsEngie.Coordinate{row: 1, col: 2},
-                %IslandsEngie.Coordinate{row: 2, col: 2}
+                %IslandsEngine.Coordinate{row: 1, col: 1},
+                %IslandsEngine.Coordinate{row: 2, col: 1},
+                %IslandsEngine.Coordinate{row: 1, col: 2},
+                %IslandsEngine.Coordinate{row: 2, col: 2}
             ]),
-            hit_coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 2, col: 2}])
+            hit_coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 2, col: 2}])
         }}
     """
     @spec guess(t(), Coordinate.t()) :: guess_result()
@@ -128,15 +128,15 @@ defmodule IslandsEngie.Island do
     @doc """
     ## Examples
 
-        iex> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(4, 4)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> {:hit, dot} = IslandsEngie.Island.guess(dot, dot_coordinate)
-        ...> IslandsEngie.Island.forested?(dot)
+        iex> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(4, 4)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> {:hit, dot} = IslandsEngine.Island.guess(dot, dot_coordinate)
+        ...> IslandsEngine.Island.forested?(dot)
         true
 
-        iex> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(4, 4)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> IslandsEngie.Island.forested?(dot)
+        iex> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(4, 4)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> IslandsEngine.Island.forested?(dot)
         false
     """
     @spec forested?(t()) :: boolean()

@@ -1,5 +1,5 @@
-defmodule IslandsEngie.Board do
-    alias IslandsEngie.{Coordinate, Island}
+defmodule IslandsEngine.Board do
+    alias IslandsEngine.{Coordinate, Island}
 
     @type t :: map()
 
@@ -8,7 +8,7 @@ defmodule IslandsEngie.Board do
     @doc """
     ## Examples
 
-        iex> board = IslandsEngie.Board.new()
+        iex> board = IslandsEngine.Board.new()
         %{}
     """
     @spec new() :: t()
@@ -17,33 +17,33 @@ defmodule IslandsEngie.Board do
     @doc """
     ## Examples
 
-        iex> board = IslandsEngie.Board.new()
-        ...> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :square, square)
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(2, 2)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> IslandsEngie.Board.position_island(board, :dot, dot)
+        iex> board = IslandsEngine.Board.new()
+        ...> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :square, square)
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(2, 2)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> IslandsEngine.Board.position_island(board, :dot, dot)
         {:error, :overlappin_island}
 
-        iex> board = IslandsEngie.Board.new()
-        ...> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :square, square)
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(3, 3)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> IslandsEngie.Board.position_island(board, :dot, dot)
+        iex> board = IslandsEngine.Board.new()
+        ...> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :square, square)
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(3, 3)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> IslandsEngine.Board.position_island(board, :dot, dot)
         %{
-            dot: %IslandsEngie.Island{
-                coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 3, col: 3}]),
+            dot: %IslandsEngine.Island{
+                coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 3, col: 3}]),
                 hit_coordinates: MapSet.new([])
             },
-            square: %IslandsEngie.Island{
+            square: %IslandsEngine.Island{
                 coordinates: MapSet.new([
-                %IslandsEngie.Coordinate{row: 1, col: 1},
-                %IslandsEngie.Coordinate{row: 2, col: 1},
-                %IslandsEngie.Coordinate{row: 1, col: 2},
-                %IslandsEngie.Coordinate{row: 2, col: 2}
+                %IslandsEngine.Coordinate{row: 1, col: 1},
+                %IslandsEngine.Coordinate{row: 2, col: 1},
+                %IslandsEngine.Coordinate{row: 1, col: 2},
+                %IslandsEngine.Coordinate{row: 2, col: 2}
                 ]),
                 hit_coordinates: MapSet.new([])
             }
@@ -69,66 +69,66 @@ defmodule IslandsEngie.Board do
         @doc """
     ## Examples
 
-        iex> board = IslandsEngie.Board.new()
-        ...> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :square, square)
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(3, 3)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :dot, dot)
-        ...> {:ok, miss_coordinate} = IslandsEngie.Coordinate.new(10, 10)
-        ...> IslandsEngie.Board.guess(board, miss_coordinate)
+        iex> board = IslandsEngine.Board.new()
+        ...> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :square, square)
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(3, 3)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :dot, dot)
+        ...> {:ok, miss_coordinate} = IslandsEngine.Coordinate.new(10, 10)
+        ...> IslandsEngine.Board.guess(board, miss_coordinate)
         {:miss, :none, :no_win, %{
-            dot: %IslandsEngie.Island{
-                coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 3, col: 3}]),
+            dot: %IslandsEngine.Island{
+                coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 3, col: 3}]),
                 hit_coordinates: MapSet.new([])
             },
-            square: %IslandsEngie.Island{
+            square: %IslandsEngine.Island{
                 coordinates: MapSet.new([
-                %IslandsEngie.Coordinate{row: 1, col: 1},
-                %IslandsEngie.Coordinate{row: 2, col: 1},
-                %IslandsEngie.Coordinate{row: 1, col: 2},
-                %IslandsEngie.Coordinate{row: 2, col: 2}
+                %IslandsEngine.Coordinate{row: 1, col: 1},
+                %IslandsEngine.Coordinate{row: 2, col: 1},
+                %IslandsEngine.Coordinate{row: 1, col: 2},
+                %IslandsEngine.Coordinate{row: 2, col: 2}
                 ]),
                 hit_coordinates: MapSet.new([])
             }
         }}
 
-        iex> board = IslandsEngie.Board.new()
-        ...> {:ok, square_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> {:ok, square} = IslandsEngie.Island.new(:square, square_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :square, square)
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(3, 3)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :dot, dot)
-        ...> {:ok, hit_coordinate} = IslandsEngie.Coordinate.new(1, 1)
-        ...> IslandsEngie.Board.guess(board, hit_coordinate)
+        iex> board = IslandsEngine.Board.new()
+        ...> {:ok, square_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> {:ok, square} = IslandsEngine.Island.new(:square, square_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :square, square)
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(3, 3)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :dot, dot)
+        ...> {:ok, hit_coordinate} = IslandsEngine.Coordinate.new(1, 1)
+        ...> IslandsEngine.Board.guess(board, hit_coordinate)
         {:hit, :square, :no_win, %{
-            dot: %IslandsEngie.Island{
-                coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 3, col: 3}]),
+            dot: %IslandsEngine.Island{
+                coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 3, col: 3}]),
                 hit_coordinates: MapSet.new([])
             },
-            square: %IslandsEngie.Island{
+            square: %IslandsEngine.Island{
                 coordinates: MapSet.new([
-                %IslandsEngie.Coordinate{row: 1, col: 1},
-                %IslandsEngie.Coordinate{row: 2, col: 1},
-                %IslandsEngie.Coordinate{row: 1, col: 2},
-                %IslandsEngie.Coordinate{row: 2, col: 2}
+                %IslandsEngine.Coordinate{row: 1, col: 1},
+                %IslandsEngine.Coordinate{row: 2, col: 1},
+                %IslandsEngine.Coordinate{row: 1, col: 2},
+                %IslandsEngine.Coordinate{row: 2, col: 2}
                 ]),
                 hit_coordinates: MapSet.new([])
             }
         }}
 
-        iex> board = IslandsEngie.Board.new()
-        ...> {:ok, dot_coordinate} = IslandsEngie.Coordinate.new(3, 3)
-        ...> {:ok, dot} = IslandsEngie.Island.new(:dot, dot_coordinate)
-        ...> board = IslandsEngie.Board.position_island(board, :dot, dot)
-        ...> {:ok, hit_coordinate} = IslandsEngie.Coordinate.new(3, 31)
-        ...> IslandsEngie.Board.guess(board, hit_coordinate)
+        iex> board = IslandsEngine.Board.new()
+        ...> {:ok, dot_coordinate} = IslandsEngine.Coordinate.new(3, 3)
+        ...> {:ok, dot} = IslandsEngine.Island.new(:dot, dot_coordinate)
+        ...> board = IslandsEngine.Board.position_island(board, :dot, dot)
+        ...> {:ok, hit_coordinate} = IslandsEngine.Coordinate.new(3, 31)
+        ...> IslandsEngine.Board.guess(board, hit_coordinate)
         {:hit, :dot, :win, %{
-            dot: %IslandsEngie.Island{
-                coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 3, col: 3}]),
-                hit_coordinates: MapSet.new([%IslandsEngie.Coordinate{row: 3, col: 3}])
+            dot: %IslandsEngine.Island{
+                coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 3, col: 3}]),
+                hit_coordinates: MapSet.new([%IslandsEngine.Coordinate{row: 3, col: 3}])
             }
         }}
     """

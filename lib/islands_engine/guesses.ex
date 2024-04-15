@@ -1,5 +1,5 @@
-defmodule IslandsEngie.Guesses do
-    alias IslandsEngie.{Coordinate, Guesses}
+defmodule IslandsEngine.Guesses do
+    alias IslandsEngine.{Coordinate, Guesses}
 
     @enforce_keys [:hits, :misses]
     defstruct [:hits, :misses]
@@ -20,20 +20,20 @@ defmodule IslandsEngie.Guesses do
     @doc """
     ## Examples
 
-        iex> g = IslandsEngie.Guesses.new()
-        ...> {:ok, c} = IslandsEngie.Coordinate.new(1, 1)
-        ...> IslandsEngie.Guesses.add(g, :hit, c)
-        %IslandsEngie.Guesses{
-            hits: MapSet.new([%IslandsEngie.Coordinate{row: 1, col: 1}]),
+        iex> g = IslandsEngine.Guesses.new()
+        ...> {:ok, c} = IslandsEngine.Coordinate.new(1, 1)
+        ...> IslandsEngine.Guesses.add(g, :hit, c)
+        %IslandsEngine.Guesses{
+            hits: MapSet.new([%IslandsEngine.Coordinate{row: 1, col: 1}]),
             misses: MapSet.new([])
         }
 
-        iex> g = IslandsEngie.Guesses.new()
-        ...> {:ok, c} = IslandsEngie.Coordinate.new(4, 4)
-        ...> IslandsEngie.Guesses.add(g, :miss, c)
-        %IslandsEngie.Guesses{
+        iex> g = IslandsEngine.Guesses.new()
+        ...> {:ok, c} = IslandsEngine.Coordinate.new(4, 4)
+        ...> IslandsEngine.Guesses.add(g, :miss, c)
+        %IslandsEngine.Guesses{
             hits: MapSet.new([]),
-            misses: MapSet.new([%IslandsEngie.Coordinate{row: 4, col: 4}])
+            misses: MapSet.new([%IslandsEngine.Coordinate{row: 4, col: 4}])
         }
     """
 
