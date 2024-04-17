@@ -1,9 +1,11 @@
 defmodule IslandsEngine.Game do
     alias IslandsEngine.{Board, Coordinate, Guesses, Island, Rules}
 
-    use GenServer
+    use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
 
     @players [:player1, :player2]
+
+    @timeout_ms 1000 * 60 * 60 * 24
 
     def via_tuple(name), do: {:via, Registry, {Registry.Game, name}}
 
@@ -28,7 +30,11 @@ defmodule IslandsEngine.Game do
             player1: player1,
             player2: player2,
             rules: Rules.new()
-        }}
+        }, @timeout_ms}
+    end
+
+    def handle_info(:timeout, state) do
+        {:stop, {:shutdown, :timeout}, state}
     end
 
     def handle_call({:add_player, name}, _from, state) do
@@ -38,7 +44,7 @@ defmodule IslandsEngine.Game do
             |> update_rules(rules)
             |> reply_success(:ok)
         else
-            :error -> {:reply, :error, state}
+            :error -> reply_error(state, :error)
         end
     end
 
@@ -54,9 +60,9 @@ defmodule IslandsEngine.Game do
             |> update_rules(rules)
             |> reply_success(:ok)
         else
-            :error -> {:reply, :error, state}
-            {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
-            {:error, :invalid_island_type} -> {:reply, {:error, :invalid_island_type}, state}
+            :error -> reply_error(state, :error)
+            {:error, :invalid_coordinate} -> reply_error(state, {:error, :invalid_coordinate})
+            {:error, :invalid_island_type} -> reply_error(state, {:error, :invalid_island_type})
         end
     end
 
@@ -69,8 +75,8 @@ defmodule IslandsEngine.Game do
             |> update_rules(rules)
             |> reply_success({:ok, board})
         else
-            :error -> {:reply, :error, state}
-            false -> {:reply, {:error, :not_all_islands_positioned}, state}
+            :error -> reply_error(state, :error)
+            false -> reply_error(state, {:error, :not_all_islands_positioned})
         end
     end
 
@@ -89,8 +95,8 @@ defmodule IslandsEngine.Game do
             |> update_rules(rules)
             |> reply_success({hit_or_miss, forested_island, win_status})
         else
-            :error -> {:reply, :error, state}
-            {:error, :invalid_coordinate} -> {:reply, {:error, :invalid_coordinate}, state}
+            :error -> reply_error(state, :error)
+            {:error, :invalid_coordinate} -> reply_error(state, {:error, :invalid_coordinate})
         end
     end
 
@@ -177,7 +183,10 @@ defmodule IslandsEngine.Game do
     end
 
     defp reply_success(state, reply),
-        do: {:reply, reply, state}
+        do: {:reply, reply, state, @timeout_ms}
+
+    defp reply_error(state, error),
+        do: {:reply, error, state, @timeout_ms}
 
     defp player_board(state, player),
         do: Map.get(state, player).board
