@@ -14,28 +14,29 @@ defmodule IslandsEngine.Game do
     end
 
     def init(name) do
-        player1 = %{
-            name: name,
-            board: Board.new(),
-            guesses: Guesses.new()
-        }
-
-        player2 = %{
-            name: nil,
-            board: Board.new(),
-            guesses: Guesses.new()
-        }
-
-        {:ok, %{
-            player1: player1,
-            player2: player2,
-            rules: Rules.new()
-        }, @timeout_ms}
+        send(self(), {:set_state, name})
+        {:ok, fresh_state(name)}
     end
 
     def handle_info(:timeout, state) do
         {:stop, {:shutdown, :timeout}, state}
     end
+
+    def handle_info({:set_state, name}, _state) do
+        state =
+            case lookup_state(name) do
+              nil -> fresh_state(name)
+              state -> state
+            end
+        persist_state(state)
+        {:noreply, state, @timeout_ms}
+    end
+
+    def terminate({:shutdown, :timeout}, state) do
+        :ets.delete(:game_state, state.player1.name)
+    end
+
+    def terminate(_reason, _state), do: :ok
 
     def handle_call({:add_player, name}, _from, state) do
         with {:ok, rules} <- Rules.check(state.rules, :add_player) do
@@ -182,8 +183,10 @@ defmodule IslandsEngine.Game do
         end)
     end
 
-    defp reply_success(state, reply),
-        do: {:reply, reply, state, @timeout_ms}
+    defp reply_success(state, reply) do
+        persist_state(state)
+        {:reply, reply, state, @timeout_ms}
+    end
 
     defp reply_error(state, error),
         do: {:reply, error, state, @timeout_ms}
@@ -193,4 +196,35 @@ defmodule IslandsEngine.Game do
 
     defp opponent(:player1), do: :player2
     defp opponent(:player2), do: :player1
+
+    defp fresh_state(name) do
+        player1 = %{
+            name: name,
+            board: Board.new(),
+            guesses: Guesses.new()
+        }
+
+        player2 = %{
+            name: nil,
+            board: Board.new(),
+            guesses: Guesses.new()
+        }
+
+        %{
+            player1: player1,
+            player2: player2,
+            rules: Rules.new()
+        }
+    end
+
+    defp persist_state(state) do
+        :ets.insert(:game_state, {state.player1.name, state})
+    end
+
+    defp lookup_state(name) do
+        case :ets.lookup(:game_state, name) do
+            [] -> nil
+            [{_, state}] -> state
+        end
+    end
 end
