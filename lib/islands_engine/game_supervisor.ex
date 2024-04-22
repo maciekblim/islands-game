@@ -1,7 +1,7 @@
 defmodule IslandsEngine.GameSupervisor do
   use DynamicSupervisor
 
-  alias IslandsEngine.Game
+  alias IslandsEngine.{Game, GamesRepository}
 
   def start_link(_init_arg) do
     DynamicSupervisor.start_link(__MODULE__, :ok, name: __MODULE__)
@@ -17,7 +17,7 @@ defmodule IslandsEngine.GameSupervisor do
   end
 
   def stop_game(name) do
-    :ets.delete(:game_state, name)
+    GamesRepository.delete(name)
     DynamicSupervisor.terminate_child(__MODULE__, pid_from_name(name))
   end
 

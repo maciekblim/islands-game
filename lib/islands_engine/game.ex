@@ -1,5 +1,5 @@
 defmodule IslandsEngine.Game do
-    alias IslandsEngine.{Board, Coordinate, Guesses, Island, Rules}
+    alias IslandsEngine.{Board, Coordinate, GamesRepository, Guesses, Island, Rules}
 
     use GenServer, start: {__MODULE__, :start_link, []}, restart: :transient
 
@@ -24,16 +24,16 @@ defmodule IslandsEngine.Game do
 
     def handle_info({:set_state, name}, _state) do
         state =
-            case lookup_state(name) do
+            case GamesRepository.find_by_name(name) do
               nil -> fresh_state(name)
               state -> state
             end
-        persist_state(state)
+        GamesRepository.insert(state)
         {:noreply, state, @timeout_ms}
     end
 
     def terminate({:shutdown, :timeout}, state) do
-        :ets.delete(:game_state, state.player1.name)
+        GamesRepository.delete(state.player1.name)
     end
 
     def terminate(_reason, _state), do: :ok
@@ -184,7 +184,7 @@ defmodule IslandsEngine.Game do
     end
 
     defp reply_success(state, reply) do
-        persist_state(state)
+        GamesRepository.insert(state)
         {:reply, reply, state, @timeout_ms}
     end
 
@@ -215,16 +215,5 @@ defmodule IslandsEngine.Game do
             player2: player2,
             rules: Rules.new()
         }
-    end
-
-    defp persist_state(state) do
-        :ets.insert(:game_state, {state.player1.name, state})
-    end
-
-    defp lookup_state(name) do
-        case :ets.lookup(:game_state, name) do
-            [] -> nil
-            [{_, state}] -> state
-        end
     end
 end
